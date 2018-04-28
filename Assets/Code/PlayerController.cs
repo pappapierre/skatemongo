@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour {
     public GameObject TruckBack;
     public GameObject[] wheels;
 
+    [Header("Board effects ----------------------------")]
+    public TrailRenderer[] wheelTrails;
+
     [Header("trickHotspots ----------------------------------")]
     public Collider boardCenter;
     public Collider boardNose;
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour {
     public int wheelsOnGround = 0;
     public float popPower = 15f;
     public float spinMin = 0.3f;
+    public float spinPowerAir = 0.9f;
     public Vector3 velocity;
 
     [Header("READONLY ----------------------------------")]
@@ -62,44 +66,56 @@ public class PlayerController : MonoBehaviour {
     public bool leaning = false;
     public bool forceLanding = false;
     public bool tricking = false;
+    public bool fakey = false;
 
     Ray ray;
     RaycastHit hit;
     RaycastHit[] hits;
+
+    [Header("READONLY TIME VALS----------------------------------")]
+    public float timeSinceLastPush = 1;
+    public float timeSinceTrick = 0;
 
     #region Unity Methods ------------------------------------------------------------------------------
     void Update() {
         //keep grounded state updated at all times - what if i'm popping ONTO something? 
         CheckKeyboardInputs();
         CheckGroundedState();
+
         KeepUpdated();
         KeepAnimatorUpdated();
 
         //if grounded, normal controls apply
         // push / brake / lean left / lean right
         if (Grounded) {
-            //DEBUG keyboard input
-
-            //STATE CHECKING
             //braking
             if (braking) {
                 Action_Brake();
+                BrakeEffects(true);
+            } else {
+                BrakeEffects(false);
             }
 
             //leaning
             if (leaning) {
-                Action_Leaning();
+                Action_Leaning(1);
+            } else {
+                leaningDirection *= leaningDirectionDecay;
+            }
+        } else {
+            if (leaning) {
+                Action_Leaning(spinPowerAir);
             } else {
                 leaningDirection *= leaningDirectionDecay;
             }
 
-            //APPLY unapplied properties
-            ApplyLeaning();
-            ApplyBoardTransforms();
-        } else {
             if (forceLanding)
                 rb.AddForce(-Vector3.up * forceLandingPower);
         }
+
+        //APPLY unapplied properties
+        ApplyLeaning();
+        ApplyBoardTransforms();
     }
 
     void FixedUpdate() {
@@ -120,6 +136,11 @@ public class PlayerController : MonoBehaviour {
             Input_ResetBoard();
         }
 
+        //FAKEY toggle
+        if (Input.GetKeyDown(KeyCode.F)) {
+            fakey = !fakey;
+        }
+
         //PUSH
         if (Input.GetKeyDown(KeyCode.W))
             Input_Push();
@@ -136,7 +157,7 @@ public class PlayerController : MonoBehaviour {
             if (Input.GetKey(KeyCode.A))
                 Input_LeanLeft(true);
 
-            if(Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D))
                 Input_LeanRight(true);
         } else {
             if (!Application.isMobilePlatform) {
@@ -156,9 +177,12 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Keypad0))
             Input_Pop();
 
-        // FLIP!
+        // FLIPS!
         if (Input.GetKeyDown(KeyCode.Keypad1))
-            Input_Flip();
+            Input_Kickflip();
+
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            Input_Heelflip();
     }
     #endregion
 
@@ -202,9 +226,14 @@ public class PlayerController : MonoBehaviour {
         DoTrick("Pop");
     }
 
-    //IMPULSE flip!
-    public void Input_Flip() {
-        DoTrick("Flip");
+    //IMPULSE kickflip!
+    public void Input_Kickflip() {
+        DoTrick("Kickflip");
+    }
+
+    //IMPULSE heelflip!
+    public void Input_Heelflip() {
+        DoTrick("Heelflip");
     }
 
     //STATE forceLanding
@@ -214,7 +243,6 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region actioning forces ---------------------------------------------------------------------------
-    float timeSinceLastPush = 1;
     //push - impulse action
     void Action_Push() {
         if (!Grounded)
@@ -232,21 +260,28 @@ public class PlayerController : MonoBehaviour {
     }
 
     //lean - state action
-    void Action_Leaning() {
-        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve;
+    void Action_Leaning(float leaningPower) {
+        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve * leaningPower;
     }
     #endregion
 
     #region force and transform application ------------------------------------------------------------
     void KeepUpdated() {
-        if(timeSinceLastPush < 1)
+        if (timeSinceLastPush < 1)
             timeSinceLastPush += Time.deltaTime;
+
+        if (timeSinceTrick < 1)
+            timeSinceTrick += Time.deltaTime;
+
         leaningDirectionLatent = Mathf.Lerp(leaningDirectionLatent, leaningDirection, Time.deltaTime * 4f);
     }
 
     void KeepAnimatorUpdated() {
         GetComponent<Animator>().SetBool("Grounded", Grounded);
         GetComponent<Animator>().SetBool("Braking", braking);
+
+        if (GetComponent<Animator>().GetBool("Fakey") != fakey)
+            GetComponent<Animator>().SetBool("Fakey", fakey);
     }
 
     //Check for 4 wheels on ground
@@ -260,7 +295,7 @@ public class PlayerController : MonoBehaviour {
             ray = new Ray(each.transform.position, -Vector3.up);
             hits = Physics.RaycastAll(ray);
 
-            foreach(RaycastHit hit in hits) {
+            foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag != "BoardComponent" && hit.collider.tag != "BoardHotspot") {
                     if ((ray.origin - hit.point).magnitude < 0.2f)
                         wheelsOnGround++;
@@ -269,27 +304,89 @@ public class PlayerController : MonoBehaviour {
         }
 
         //atleast 2 wheels on ground is grounded.
-        if (wheelsOnGround >= 2) {
+        if (wheelsOnGround >= 2 && timeSinceTrick > 0.2f) {
             Grounded = true;
+            ApplyLandingQuality();
             tricking = false;
         }
 
         //set the rigidbody drag to relevant air/ground vals.
         if (Grounded) {
-            Debug.DrawLine(transform.position, transform.position + Vector3.up*2, Color.white);
-            if(rb.drag != groundedDrag)
+            Debug.DrawLine(transform.position, transform.position + Vector3.up * 2, Color.white);
+            if (rb.drag != groundedDrag)
                 rb.drag = groundedDrag;
-        }else {
+        } else {
             Debug.DrawLine(transform.position, transform.position + Vector3.up * 2, Color.red);
             if (rb.drag != airDrag)
                 rb.drag = airDrag;
         }
     }
+    #endregion
 
+    #region Landing Quality
+
+    void ApplyLandingQuality() {
+        if (tricking) {
+            if (CheckQualityOfLanding()) {
+                RestartLandingQualityTimer(false);
+            } else {
+                RestartLandingQualityTimer(true);
+            }
+        }
+    }
+
+    bool CheckQualityOfLanding() {
+        if ( (orientationAtPop.eulerAngles.y % 180) < (transform.rotation.eulerAngles.y % 180) - 15f ||
+            (orientationAtPop.eulerAngles.y % 180) > (transform.rotation.eulerAngles.y % 180) + 15f) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    [Header("Landing stuff ------------------------------")]
+    public Text LandingQualityText;
+    public Color colorSolidLanding;
+    public Color colorSketchyLanding;
+    void RestartLandingQualityTimer(bool val) {
+        if (val) {
+            LandingQualityText.text = "<size=32> -</size> solid <size=32> -</size>";
+            LandingQualityText.color = colorSolidLanding;
+        } else {
+            LandingQualityText.text = "<size=32> -</size> sketchy <size=32> -</size>";
+            LandingQualityText.color = colorSketchyLanding;
+        }
+
+        if (LandingQualityTimerRoutine != null)
+            StopCoroutine(LandingQualityTimerRoutine);
+
+        LandingQualityTimerRoutine = StartCoroutine(LandingQualityTimer());
+    }
+
+    Coroutine LandingQualityTimerRoutine;
+    IEnumerator LandingQualityTimer() {
+        LandingQualityText.transform.localScale = Vector3.one;
+        yield return new WaitForSeconds(0.4f);
+
+        var col = LandingQualityText.color;
+        while (col.a > 0) {
+            col.a -= Time.deltaTime * 3f;
+            LandingQualityText.color = col;
+            LandingQualityText.transform.localScale += Vector3.one * Time.deltaTime;
+            yield return null;
+        }
+
+        LandingQualityText.color = Color.clear;
+    }
+    #endregion
+
+    #region force application
     //leaning - visuals and forces
     void ApplyLeaning() {
         leaningDirection = Mathf.Clamp(leaningDirection, -1, 1);
         transform.Rotate((leaningDirection * Vector3.up) * leanPower);
+
+        if(Grounded)
         rb.AddForce((leaningDirection * transform.right) * leanVeloPower * velocity.magnitude);
     }
 
@@ -306,8 +403,15 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region tricks and pops ----------------------------------------------------------------------------
+
+    Quaternion orientationAtPop;
+
     //do trick by name
     void DoTrick(string name) {
+
+        orientationAtPop = transform.rotation;
+        timeSinceTrick = 0;
+
         switch (name) {
             case ("Pop"):
                 tricking = true;
@@ -324,8 +428,11 @@ public class PlayerController : MonoBehaviour {
 
                 //prepare for landing
                 StartCoroutine(Land(0.5f));
+
+                //are we turning frontside/backside? 
+                CheckAngular();
                 break;
-            case ("Flip"):
+            case ("Kickflip"):
                 tricking = true;
                 if (!Grounded) {
                     //apply POP force if grounded
@@ -336,16 +443,36 @@ public class PlayerController : MonoBehaviour {
                     rb.rotation = Quaternion.Euler(0, rb.rotation.eulerAngles.y, rb.rotation.eulerAngles.z);
 
                     //trigger correct animation
-                    GetComponent<Animator>().SetTrigger("Flip");
+                    GetComponent<Animator>().SetTrigger("Kickflip");
 
                     //prepare for landing
                     StartCoroutine(Land(0.5f));
+
+                    //are we turning frontside/backside? 
+                    CheckAngular();
+                }
+                break;
+            case ("Heelflip"):
+                tricking = true;
+                if (!Grounded) {
+                    //apply POP force if grounded
+                    if (Grounded)
+                        rb.velocity += Vector3.up * popPower;
+
+                    //reset rotation to flat - HACK
+                    rb.rotation = Quaternion.Euler(0, rb.rotation.eulerAngles.y, rb.rotation.eulerAngles.z);
+
+                    //trigger correct animation
+                    GetComponent<Animator>().SetTrigger("Heelflip");
+
+                    //prepare for landing
+                    StartCoroutine(Land(0.5f));
+
+                    //are we turning frontside/backside? 
+                    CheckAngular();
                 }
                 break;
         }
-
-        //are we turning frontside/backside? 
-        CheckAngular();
     }
 
     //frontside / backside spin
@@ -361,6 +488,21 @@ public class PlayerController : MonoBehaviour {
         rb.AddForce(-Vector3.up * 50);
         leaningDirectionLatent = leaningDirection;
     }
+    #endregion
+
+    #region FX methods
+    float trailTime = 0;
+    void BrakeEffects(bool state) {
+        //if (state) {
+        //    trailTime = 1;
+        //} else {
+        //    trailTime = 0;
+        //}
+        //foreach (TrailRenderer each in wheelTrails) {
+        //    each.time = Mathf.Lerp(each.time, trailTime, Time.deltaTime * 6f);
+        //}
+    }
+
     #endregion
 
 }
