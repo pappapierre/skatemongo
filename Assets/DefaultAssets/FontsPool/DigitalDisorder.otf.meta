@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: bac520258093d4a4abfacebc41ad4b95
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Digital Disorder
+  fontNames:
+  - Digital Disorder
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 90e6f84334526cf4a9eb292527557ca5, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
