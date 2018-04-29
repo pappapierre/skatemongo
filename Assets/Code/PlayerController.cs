@@ -7,6 +7,18 @@ public class PlayerController : MonoBehaviour {
     [Header("Debugging ------------------------------")]
     public bool DebugKeyboard = false;
 
+    [Header("UI BUTTONS ------------------------------")]
+    public GameObject btn_Push;
+    public GameObject btn_Brake;
+    public GameObject btn_Pop;
+    public GameObject btn_Stickit;
+    public GameObject btn_KickFlip;
+    public GameObject btn_HeelFlip;
+    public GameObject btn_L_LeanLeft;
+    public GameObject btn_L_LeanRight;
+    public GameObject btn_R_LeanLeft;
+    public GameObject btn_R_LeanRight;
+
     [Header("Camera Rig ------------------------------")]
     public GameObject CameraRig;
     public float predVelPow = 0.2f;
@@ -84,6 +96,7 @@ public class PlayerController : MonoBehaviour {
 
         KeepUpdated();
         KeepAnimatorUpdated();
+        KeepButtonsUpdated();
 
         //if grounded, normal controls apply
         // push / brake / lean left / lean right
@@ -116,9 +129,7 @@ public class PlayerController : MonoBehaviour {
         //APPLY unapplied properties
         ApplyLeaning();
         ApplyBoardTransforms();
-    }
 
-    void FixedUpdate() {
         //cache current velocity and move camera
         velocity = rb.velocity;
         CameraRig.transform.position = Vector3.Lerp(CameraRig.transform.position, transform.position + new Vector3(velocity.x, 0, velocity.z) * predVelPow, Time.deltaTime * predictionAchievement);
@@ -128,7 +139,7 @@ public class PlayerController : MonoBehaviour {
     #region PC debugging -------------------------------------------------------------------------------
     //keyboard debugs for PC testing
     void CheckKeyboardInputs() {
-        if (!DebugKeyboard)
+        if (!DebugKeyboard || Application.isMobilePlatform)
             return;
 
         //RESET
@@ -183,6 +194,38 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Keypad2))
             Input_Heelflip();
+    }
+    #endregion
+
+    #region UI dynamism --------------------------------------------------------------------------------
+    void KeepButtonsUpdated() {
+        if (Grounded && !tricking) {
+            btn_Push.SetActive(true);
+            btn_Brake.SetActive(true);
+            btn_Pop.SetActive(true);
+
+            btn_Stickit.SetActive(false);
+            btn_KickFlip.SetActive(false);
+            btn_HeelFlip.SetActive(false);
+
+            btn_L_LeanLeft.SetActive(false);
+            btn_L_LeanRight.SetActive(false);
+            btn_R_LeanLeft.SetActive(true);
+            btn_R_LeanRight.SetActive(true);
+        } else {
+            btn_Push.SetActive(false);
+            btn_Brake.SetActive(false);
+            btn_Pop.SetActive(false);
+
+            btn_Stickit.SetActive(true);
+            btn_KickFlip.SetActive(true);
+            btn_HeelFlip.SetActive(true);
+
+            btn_L_LeanLeft.SetActive(true);
+            btn_L_LeanRight.SetActive(true);
+            btn_R_LeanLeft.SetActive(false);
+            btn_R_LeanRight.SetActive(false);
+        }
     }
     #endregion
 
@@ -249,7 +292,7 @@ public class PlayerController : MonoBehaviour {
             return;
 
         GetComponent<Animator>().SetTrigger("Push");
-        rb.AddForce(transform.forward * PushOffPower * timeSinceLastPush);
+        rb.AddForce(transform.forward * PushOffPower * timeSinceLastPush * (fakey ? -1 : 1) );
         //consecutive pushes deminish pushing power
         timeSinceLastPush *= 0.5f;
     }
@@ -261,7 +304,7 @@ public class PlayerController : MonoBehaviour {
 
     //lean - state action
     void Action_Leaning(float leaningPower) {
-        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve * leaningPower;
+        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve * leaningPower ;
     }
     #endregion
 
@@ -324,7 +367,6 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region Landing Quality
-
     void ApplyLandingQuality() {
         if (tricking) {
             if (CheckQualityOfLanding()) {
@@ -336,6 +378,14 @@ public class PlayerController : MonoBehaviour {
     }
 
     bool CheckQualityOfLanding() {
+        //float angleFromLaunch = Quaternion.Angle(orientationAtPop, transform.rotation);
+        //Debug.DrawLine(transform.position, transform.position + orientationAtPop * Vector3.forward * 2, Color.blue, 2f);
+        //Debug.DrawLine(transform.position, transform.position + transform.rotation * Vector3.forward * 2, Color.magenta, 2f);
+
+        //print(angleFromLaunch);
+        //if (angleFromLaunch > 150)
+        //    fakey = !fakey;
+
         if ( (orientationAtPop.eulerAngles.y % 180) < (transform.rotation.eulerAngles.y % 180) - 15f ||
             (orientationAtPop.eulerAngles.y % 180) > (transform.rotation.eulerAngles.y % 180) + 15f) {
             return true;
@@ -383,8 +433,9 @@ public class PlayerController : MonoBehaviour {
     #region force application
     //leaning - visuals and forces
     void ApplyLeaning() {
+        // * (fakey ? -1 : 1)
         leaningDirection = Mathf.Clamp(leaningDirection, -1, 1);
-        transform.Rotate((leaningDirection * Vector3.up) * leanPower);
+        rb.rotation = Quaternion.Euler(rb.rotation.eulerAngles + (leaningDirection * Vector3.up) * leanPower);
 
         if(Grounded)
         rb.AddForce((leaningDirection * transform.right) * leanVeloPower * velocity.magnitude);
@@ -490,7 +541,7 @@ public class PlayerController : MonoBehaviour {
     }
     #endregion
 
-    #region FX methods
+    #region FX methods ---------------------------------------------------------------------------------
     float trailTime = 0;
     void BrakeEffects(bool state) {
         //if (state) {
