@@ -96,6 +96,8 @@
      <Compile Include="Assets\DefaultAssets\ConsolePro\Remote\LiteNetLib\ReliableChannel.cs" />
      <Compile Include="Assets\DefaultAssets\ConsolePro\Remote\LiteNetLib\SequencedChannel.cs" />
      <Compile Include="Assets\DefaultAssets\ConsolePro\Remote\LiteNetLib\SimpleChannel.cs" />
+     <Compile Include="Assets\DefaultAssets\Kino\Glitch\AnalogGlitch.cs" />
+     <Compile Include="Assets\DefaultAssets\Kino\Glitch\DigitalGlitch.cs" />
      <Compile Include="Assets\DefaultAssets\Kino\Ramp\Ramp.cs" />
      <Compile Include="Assets\DefaultAssets\Pixelation\Example\Scripts\ImageEffectBase.cs" />
      <Compile Include="Assets\DefaultAssets\Pixelation\Example\Scripts\Plane.cs" />
@@ -160,6 +162,7 @@
      <None Include="Assets\DefaultAssets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ColorCorrectionCurves.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\ScreenSpaceAmbientObscurance.shader" />
      <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVOUpsample.compute" />
+     <None Include="Assets\DefaultAssets\Kino\Glitch\Shader\AnalogGlitch.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\_Antialiasing\NFAA.shader" />
      <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\PSSL.hlsl" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\ScreenSpaceRaytrace.cginc" />
@@ -171,6 +174,7 @@
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects\TessellationShaders\Shaders\BumpedSpecularSmooth.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects\Projectors\Guidelines.txt" />
+     <None Include="Assets\DefaultAssets\Kino\Glitch\Shader\DigitalGlitch.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\MotionBlur.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\_DepthOfField\SeparableBlur.shader" />

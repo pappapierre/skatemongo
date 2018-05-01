@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DefaultAssets\Kino\Glitch\Editor\AnalogGlitchEditor.cs" />
+     <Compile Include="Assets\DefaultAssets\Kino\Glitch\Editor\DigitalGlitchEditor.cs" />
      <Compile Include="Assets\DefaultAssets\Kino\Ramp\Editor\RampEditor.cs" />
      <Compile Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Editor\ImageEffects\AntialiasingEditor.cs" />
      <Compile Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Editor\ImageEffects\BloomAndFlaresEditor.cs" />

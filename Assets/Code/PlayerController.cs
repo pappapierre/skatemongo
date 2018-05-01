@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Camera Rig ------------------------------")]
     public GameObject CameraRig;
+    public bool CameraMatchesPlayerRotation = false;
     public float predVelPow = 0.2f;
     public float predictionAchievement = 1f;
 
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody rb;
     public float groundedDrag;
     public float airDrag;
+    public float MaxVelocity = 1000f;
 
     [Header("Board Rig -------------------------------")]
     public GameObject Board;
@@ -70,6 +72,11 @@ public class PlayerController : MonoBehaviour {
     public float spinMin = 0.3f;
     public float spinPowerAir = 0.9f;
     public Vector3 velocity;
+    public float maxVelocity = 20f;
+    public float angleForStanceSwitch = 110f;
+
+    [Header("fx ----------------------------------")]
+    public ParticleSystem PopFX;
 
     [Header("READONLY ----------------------------------")]
     //bools ------------------------------------------
@@ -78,7 +85,7 @@ public class PlayerController : MonoBehaviour {
     public bool leaning = false;
     public bool forceLanding = false;
     public bool tricking = false;
-    public bool fakey = false;
+    public bool inverseDirection = false;
 
     Ray ray;
     RaycastHit hit;
@@ -89,6 +96,10 @@ public class PlayerController : MonoBehaviour {
     public float timeSinceTrick = 0;
 
     #region Unity Methods ------------------------------------------------------------------------------
+    private void Start() {
+        SetFakeyEffects(inverseDirection);
+    }
+
     void Update() {
         //keep grounded state updated at all times - what if i'm popping ONTO something? 
         CheckKeyboardInputs();
@@ -131,8 +142,16 @@ public class PlayerController : MonoBehaviour {
         ApplyBoardTransforms();
 
         //cache current velocity and move camera
+    }
+
+    void FixedUpdate() {
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, MaxVelocity);
         velocity = rb.velocity;
+        Debug.DrawLine(transform.position, transform.position + velocity, Color.red);
         CameraRig.transform.position = Vector3.Lerp(CameraRig.transform.position, transform.position + new Vector3(velocity.x, 0, velocity.z) * predVelPow, Time.deltaTime * predictionAchievement);
+
+        if (Grounded && CameraMatchesPlayerRotation)
+            CameraRig.transform.localRotation = Quaternion.Lerp(CameraRig.transform.localRotation, Quaternion.LookRotation((inverseDirection ? -transform.forward : transform.forward) + Vector3.up * velocity.magnitude * 0.02f, Vector3.up), Time.deltaTime * 4f);
     }
     #endregion
 
@@ -142,6 +161,11 @@ public class PlayerController : MonoBehaviour {
         if (!DebugKeyboard || Application.isMobilePlatform)
             return;
 
+        //TOGGLE FAKEYFX
+        if (Input.GetKeyDown(KeyCode.G)) {
+            DoFakeyFx = !DoFakeyFx;
+        }
+
         //RESET
         if (Input.GetKeyDown(KeyCode.R)) {
             Input_ResetBoard();
@@ -149,7 +173,7 @@ public class PlayerController : MonoBehaviour {
 
         //FAKEY toggle
         if (Input.GetKeyDown(KeyCode.F)) {
-            fakey = !fakey;
+            inverseDirection = !inverseDirection;
         }
 
         //PUSH
@@ -203,28 +227,16 @@ public class PlayerController : MonoBehaviour {
             btn_Push.SetActive(true);
             btn_Brake.SetActive(true);
             btn_Pop.SetActive(true);
-
             btn_Stickit.SetActive(false);
             btn_KickFlip.SetActive(false);
             btn_HeelFlip.SetActive(false);
-
-            btn_L_LeanLeft.SetActive(false);
-            btn_L_LeanRight.SetActive(false);
-            btn_R_LeanLeft.SetActive(true);
-            btn_R_LeanRight.SetActive(true);
         } else {
             btn_Push.SetActive(false);
             btn_Brake.SetActive(false);
             btn_Pop.SetActive(false);
-
             btn_Stickit.SetActive(true);
             btn_KickFlip.SetActive(true);
             btn_HeelFlip.SetActive(true);
-
-            btn_L_LeanLeft.SetActive(true);
-            btn_L_LeanRight.SetActive(true);
-            btn_R_LeanLeft.SetActive(false);
-            btn_R_LeanRight.SetActive(false);
         }
     }
     #endregion
@@ -232,8 +244,17 @@ public class PlayerController : MonoBehaviour {
     #region input methods ------------------------------------------------------------------------------
     //reset board instantly on the spot
     public void Input_ResetBoard() {
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            print("HardReset");
+            transform.position = Vector3.zero;
+        }
+
         transform.position = transform.position + Vector3.up * 2f;
         transform.rotation = Quaternion.identity;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        SetFakeyEffects(inverseDirection);
     }
 
     //IMPULSE push!
@@ -267,6 +288,7 @@ public class PlayerController : MonoBehaviour {
     //IMPULSE pop!
     public void Input_Pop() {
         DoTrick("Pop");
+        PopFX.Emit(1);
     }
 
     //IMPULSE kickflip!
@@ -292,7 +314,7 @@ public class PlayerController : MonoBehaviour {
             return;
 
         GetComponent<Animator>().SetTrigger("Push");
-        rb.AddForce(transform.forward * PushOffPower * timeSinceLastPush * (fakey ? -1 : 1) );
+        rb.AddForce(transform.forward * PushOffPower * timeSinceLastPush * (inverseDirection ? -1 : 1) );
         //consecutive pushes deminish pushing power
         timeSinceLastPush *= 0.5f;
     }
@@ -304,7 +326,7 @@ public class PlayerController : MonoBehaviour {
 
     //lean - state action
     void Action_Leaning(float leaningPower) {
-        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve * leaningPower ;
+        leaningDirection += leaningDir * Time.deltaTime * leaningDirectionAchieve * leaningPower;
     }
     #endregion
 
@@ -323,8 +345,8 @@ public class PlayerController : MonoBehaviour {
         GetComponent<Animator>().SetBool("Grounded", Grounded);
         GetComponent<Animator>().SetBool("Braking", braking);
 
-        if (GetComponent<Animator>().GetBool("Fakey") != fakey)
-            GetComponent<Animator>().SetBool("Fakey", fakey);
+        if (GetComponent<Animator>().GetBool("Fakey") != inverseDirection)
+            GetComponent<Animator>().SetBool("Fakey", inverseDirection);
     }
 
     //Check for 4 wheels on ground
@@ -367,8 +389,17 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region Landing Quality
+
+    [Header("Landing stuff ------------------------------")]
+    public Text stanceText;
+    public Text LandingQualityText;
+    public Color colorSolidLanding;
+    public Color colorSketchyLanding;
+
     void ApplyLandingQuality() {
         if (tricking) {
+            leaningDirection = 0;
+            leaning = false;
             if (CheckQualityOfLanding()) {
                 RestartLandingQualityTimer(false);
             } else {
@@ -378,15 +409,24 @@ public class PlayerController : MonoBehaviour {
     }
 
     bool CheckQualityOfLanding() {
-        //float angleFromLaunch = Quaternion.Angle(orientationAtPop, transform.rotation);
-        //Debug.DrawLine(transform.position, transform.position + orientationAtPop * Vector3.forward * 2, Color.blue, 2f);
-        //Debug.DrawLine(transform.position, transform.position + transform.rotation * Vector3.forward * 2, Color.magenta, 2f);
+        float angleFromLaunch = Quaternion.Angle(orientationAtPop, transform.rotation);
+        Debug.DrawLine(transform.position, transform.position + orientationAtPop * Vector3.forward * 2, Color.blue, 2f);
+        Debug.DrawLine(transform.position, transform.position + transform.rotation * Vector3.forward * 2, Color.magenta, 2f);
 
         //print(angleFromLaunch);
-        //if (angleFromLaunch > 150)
-        //    fakey = !fakey;
+        if (angleFromLaunch > angleForStanceSwitch) {
+            inverseDirection = !inverseDirection;
+            //if (!inverseDirection) {
+            //    stanceText.text = "........normal";
+            //    stanceText.color = colorSketchyLanding;
+            //} else {
+            //    stanceText.text = ".........fakey";
+            //    stanceText.color = colorSolidLanding;
+            //}
+            SetFakeyEffects(inverseDirection);
+        }
 
-        if ( (orientationAtPop.eulerAngles.y % 180) < (transform.rotation.eulerAngles.y % 180) - 15f ||
+        if ((orientationAtPop.eulerAngles.y % 180) < (transform.rotation.eulerAngles.y % 180) - 15f ||
             (orientationAtPop.eulerAngles.y % 180) > (transform.rotation.eulerAngles.y % 180) + 15f) {
             return true;
         } else {
@@ -394,10 +434,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    [Header("Landing stuff ------------------------------")]
-    public Text LandingQualityText;
-    public Color colorSolidLanding;
-    public Color colorSketchyLanding;
     void RestartLandingQualityTimer(bool val) {
         if (val) {
             LandingQualityText.text = "<size=32> -</size> solid <size=32> -</size>";
@@ -433,12 +469,11 @@ public class PlayerController : MonoBehaviour {
     #region force application
     //leaning - visuals and forces
     void ApplyLeaning() {
-        // * (fakey ? -1 : 1)
         leaningDirection = Mathf.Clamp(leaningDirection, -1, 1);
         rb.rotation = Quaternion.Euler(rb.rotation.eulerAngles + (leaningDirection * Vector3.up) * leanPower);
 
         if(Grounded)
-        rb.AddForce((leaningDirection * transform.right) * leanVeloPower * velocity.magnitude);
+        rb.AddForce((leaningDirection *  (inverseDirection ? -transform.right : transform.right)) * leanVeloPower * velocity.magnitude);
     }
 
     //board transform runtime - visuals
@@ -450,7 +485,16 @@ public class PlayerController : MonoBehaviour {
         Board.transform.localPosition = Vector3.Lerp(Board.transform.localPosition,
             -Mathf.Clamp(rb.velocity.magnitude * comMagPower, -0.45f, 0.45f) * centerOfMassOffset * Vector3.forward,
             Time.deltaTime * 8f);
+
+        Debug.DrawLine(transform.position, transform.position + transform.forward, Color.yellow);
+
+        DebugEvalTravelVsVelo();
     }
+
+    void DebugEvalTravelVsVelo() {
+        Debug.DrawLine(transform.position, transform.position + transform.forward, Color.green);
+    }
+
     #endregion
 
     #region tricks and pops ----------------------------------------------------------------------------
@@ -552,6 +596,48 @@ public class PlayerController : MonoBehaviour {
         //foreach (TrailRenderer each in wheelTrails) {
         //    each.time = Mathf.Lerp(each.time, trailTime, Time.deltaTime * 6f);
         //}
+    }
+
+
+    bool DoFakeyFx = true;
+    public GameObject NormalWorld;
+    public GameObject FakeyWorld;
+
+    public MonoBehaviour FakeyEffectOn;
+    public MonoBehaviour FakeyEffectOff;
+    public Kino.AnalogGlitch GlitchComponent;
+    public float glitchRelax = 8;
+
+    public void SetFakeyEffects(bool fakey) {
+        if (DoFakeyFx) {
+            if (fakey) {
+                FakeyEffectOn.enabled = true;
+                FakeyWorld.SetActive(true);
+                NormalWorld.SetActive(false);
+                //    FakeyEffectOff.enabled = false;
+            } else {
+                FakeyEffectOn.enabled = false;
+                FakeyWorld.SetActive(false);
+                NormalWorld.SetActive(true);
+                //    FakeyEffectOff.enabled = true;
+            }
+        }
+        StartCoroutine(Glitch());
+    }
+
+    IEnumerator Glitch() {
+        GlitchComponent.enabled = true;
+        GlitchComponent.Strength = 1;
+        //while (GlitchComponent.Strength < 1) {
+        //    GlitchComponent.Strength = Mathf.Lerp(GlitchComponent.Strength, 1, Time.deltaTime * glitchRelax*2f);
+        //    yield return null;
+        //}
+
+        while (GlitchComponent.Strength > 0) {
+            GlitchComponent.Strength = Mathf.Lerp(GlitchComponent.Strength, 0, Time.deltaTime * glitchRelax);
+            yield return null;
+        }
+        GlitchComponent.enabled = false;
     }
 
     #endregion
