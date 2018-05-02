@@ -5,9 +5,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{43CE4B77-0ED1-06DF-D6D8-916516C0693A}</ProjectGuid>
+    <ProjectGuid>{07A21C90-D344-AE1A-8456-9910C203B41A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>com.unity.postprocessing.Runtime</AssemblyName>
+    <AssemblyName>Unity.TextMeshPro</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
@@ -344,62 +344,51 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\DisplayNameAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\MaxAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\MinAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\MinMaxAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\PostProcessAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\AmbientOcclusion.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\AutoExposure.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\Bloom.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\ChromaticAberration.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\ColorGrading.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\DepthOfField.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\Dithering.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\FastApproximateAntialiasing.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\Fog.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\Grain.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\MotionBlur.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\MultiScaleVO.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\ScalableAO.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\ScreenSpaceReflections.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\SubpixelMorphologicalAntialiasing.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\TemporalAntialiasing.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Effects\Vignette.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Monitors\HistogramMonitor.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Monitors\LightMeterMonitor.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Monitors\Monitor.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Monitors\VectorscopeMonitor.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Monitors\WaveformMonitor.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\ParameterOverride.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessBundle.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessDebug.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessDebugLayer.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessEffectRenderer.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessEffectSettings.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessEvent.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessLayer.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessManager.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessProfile.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessRenderContext.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessResources.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessResourcesFactory.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\PostProcessVolume.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\ColorUtilities.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\HableCurve.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\HaltonSeq.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\LogHistogram.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\MeshUtilities.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\PropertySheet.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\PropertySheetFactory.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\RuntimeUtilities.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\ShaderIDs.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\Spline.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\TargetPool.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\TextureFormatUtilities.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\TextureLerper.cs" />
-    <Compile Include="Assets\DefaultAssets\PostProcessing\Runtime\Utils\XRSettings.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\FastAction.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\MaterialReferenceManager.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\PackageResourceImporterWindow.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TextContainer.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TextMeshPro.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TextMeshProUGUI.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Asset.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_ColorGradient.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Compatibility.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_CoroutineTween.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_DefaultControls.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Dropdown.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_FontAsset.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_InputField.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_InputValidator.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_LineInfo.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_ListPool.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_MaterialManager.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_MeshInfo.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_ObjectPool.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_ScrollbarEventHandler.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SelectionCaret.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Settings.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Sprite.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SpriteAnimator.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SpriteAsset.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SpriteAssetImportFormats.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Style.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_StyleSheet.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SubMesh.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_SubMeshUI.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_Text.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_TextElement.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_TextInfo.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_TextUtilities.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_UpdateManager.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_UpdateRegistery.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMP_XmlTagStack.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_EventManager.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_ExtensionMethods.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_FontUtilities.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_MeshUtilities.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_Private.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_ShaderUtilities.cs" />
+    <Compile Include="C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.textmeshpro@1.2.1\Scripts\Runtime\TMPro_UGUI_Private.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DefaultAssets\Kino\Glitch\Shader\AnalogGlitch.shader" />
@@ -408,65 +397,6 @@
     <None Include="Assets\DefaultAssets\Pixelation\Readme.txt" />
     <None Include="Assets\DefaultAssets\Pixelation\Shaders\Chunky.shader" />
     <None Include="Assets\DefaultAssets\Pixelation\Shaders\Pixelation.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\ACES.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\D3D11.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\D3D12.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\D3D9.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\Metal.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\OpenGL.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\PSSL.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\Vulkan.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\API\XboxOne.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\AutoExposure.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Bloom.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Copy.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\CopyStd.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\DeferredFog.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\DepthOfField.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\DepthOfField.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\DiscardAlpha.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\DiskKernels.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Dithering.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ExposureHistogram.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ExposureHistogram.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\FastApproximateAntialiasing.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\FinalPass.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Fog.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\GaussianDownsample.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\GrainBaker.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Lut2DBaker.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Lut3DBaker.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MotionBlur.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVO.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVODownsample1.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVODownsample2.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVORender.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\MultiScaleVOUpsample.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ScalableAO.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ScalableAO.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ScreenSpaceReflections.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\ScreenSpaceReflections.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\SubpixelMorphologicalAntialiasing.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\SubpixelMorphologicalAntialiasing.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\TemporalAntialiasing.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Texture2DLerp.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Texture3DLerp.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Builtins\Uber.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Colors.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Histogram.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Histogram.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\LightMeter.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Overlays.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Vectorscope.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Vectorscope.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Waveform.compute" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Debug\Waveform.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Editor\ConvertToLog.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Editor\CurveGrid.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Editor\Trackball.shader" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\Sampling.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\StdLib.hlsl" />
-    <None Include="Assets\DefaultAssets\PostProcessing\Shaders\xRLib.hlsl" />
     <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Readme.txt" />
     <None Include="Assets\DefaultAssets\Standard Assets\Effects 1\ImageEffects\Shaders\BlendModesOverlay.shader" />
