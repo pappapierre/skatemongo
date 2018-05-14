@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileSkating", "MobileSkating.csproj", "{AD42BEDE-17B1-4377-0FF3-E093E4B1E860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileSkating.Plugins", "MobileSkating.Plugins.csproj", "{808BEBAE-39AC-6B4D-F899-63F08E769F81}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.TextMeshPro", "Unity.TextMeshPro.csproj", "{07A21C90-D344-AE1A-8456-9910C203B41A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileSkating.Plugins", "MobileSkating.Plugins.csproj", "{808BEBAE-39AC-6B4D-F899-63F08E769F81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileSkating.Editor.Plugins", "MobileSkating.Editor.Plugins.csproj", "{467A6DE3-D5BD-DB16-CC81-D1E0C703B017}"
 EndProject
@@ -27,14 +27,14 @@ Global
 		{AD42BEDE-17B1-4377-0FF3-E093E4B1E860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD42BEDE-17B1-4377-0FF3-E093E4B1E860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD42BEDE-17B1-4377-0FF3-E093E4B1E860}.Release|Any CPU.Build.0 = Release|Any CPU
-		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07A21C90-D344-AE1A-8456-9910C203B41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{808BEBAE-39AC-6B4D-F899-63F08E769F81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{467A6DE3-D5BD-DB16-CC81-D1E0C703B017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{467A6DE3-D5BD-DB16-CC81-D1E0C703B017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{467A6DE3-D5BD-DB16-CC81-D1E0C703B017}.Release|Any CPU.ActiveCfg = Release|Any CPU
